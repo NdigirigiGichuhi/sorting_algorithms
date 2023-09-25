@@ -45,7 +45,7 @@ int partition(int *array, int low, int high, size_t n)
 	}
 	return (i + 1); /*current position of pivot*/
 }
-/*
+/**
  * recursion_sort - recursion for partioning the two divides
  * @array: array to be partition
  * @low: index for lower bound
