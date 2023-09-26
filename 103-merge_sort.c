@@ -1,4 +1,4 @@
-#include "sort.h"
+#nclude "sort.h"
 
 /**
  * merge - merges two arrays
@@ -12,6 +12,8 @@ void merge(int *array, int low, int mid, int high)
 {
 	int array1[100], array2[100], result[100];
 	int i = 0, j = 0, k = 0;
+
+	printf("[left]: %d", low);
 
 	for (i = 0; i < mid - low + 1; i++)
 		array1[i] = array[low + i];
