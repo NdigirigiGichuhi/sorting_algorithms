@@ -1,4 +1,4 @@
-#nclude "sort.h"
+#include "sort.h"
 
 /**
  * merge - merges two arrays
