@@ -36,8 +36,12 @@ void counting_sort(int *array, size_t size)
 	for (i = 0; i < max + 1; i++)	/*initializes counting array with 0's*/
 		count_array[i] = 0;
 	for (x = 0; x < size; x++)	/*counts occurences of each element*/
+	{
 		count_array[array[x]]++;
-
+	}
+	print_array(count_array, max);
+	/*for (i = 1; i <= max; i++)
+		count_array[i] += count_array[i - 1];*/
 	for (i = 0; i <= max; i++)	/*using counting array to created sorted array*/
 	{
 		while (count_array[i] > 0)
