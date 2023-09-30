@@ -1,90 +1,81 @@
 #include "sort.h"
 
-/**
- * merge - merges two arrays
- * @array: array to merge
- * @low: index zero
- * @mid: middle index
- * @high: largest index
- */
+void merge(int *array, int *left, int left_size, int *right, int right_size) {
+    int i = 0, j = 0, k = 0;
+    int *temp;
 
-void merge(int *array, int low, int mid, int high)
-{
-	int array1[100], array2[100], result[100];
-	int i = 0, j = 0, k = 0;
+    temp = (int *)malloc((left_size + right_size) * sizeof(int));
 
-	printf("[left]: %d", low);
+    while (i < left_size && j < right_size) {
+        if (left[i] <= right[j]) {
+            temp[k++] = left[i++];
+        } else {
+            temp[k++] = right[j++];
+        }
+    }
 
-	for (i = 0; i < mid - low + 1; i++)
-		array1[i] = array[low + i];
-	for (i = 0; i < high - mid; i++)
-		array2[i] = array[mid + 1 + i];
-	i = 0;
-	while (i < mid - low + 1 && j < high - mid)
-	{
-		if (array1[i] < array2[j])
-		{
-			result[k] = array1[i], k++, i++;
-		}
-		else
-		{
-			result[k] = array2[j], k++, j++;
-		}
-	}
+    while (i < left_size) {
+        temp[k++] = left[i++];
+    }
 
-	while (i < mid - low + 1)
-	{
-		result[k] = array1[i];
-		k++;
-		i++;
-	}
+    while (j < right_size) {
+        temp[k++] = right[j++];
+    }
 
-	while (j < high - mid)
-	{
-		result[k] = array2[j];
-		k++;
-		j++;
-	}
+    for (i = 0; i < left_size + right_size; i++) {
+        array[i] = temp[i];
+    }
 
-	for (i = low; i <= high; i++)
-	{
-		array[i] = result[i - low];
-	}
+    free(temp);
 }
-
-/**
- * recursion - divides array
- * @array: array to divide
- * @low: index zero
- * @high: largest index
- */
-
-void recursion(int *array, int low, int high)
-{
-	int mid;
-
-	if (low < high)
-	{
-		mid = low + (high - low) / 2;
-		recursion(array, low, mid);
-		recursion(array, mid + 1, high);
-		merge(array, low, mid, high);
-	}
-}
-
-/**
- * merge_sort - sorts array
- * @array: array to sort
- * @size: size of array.
- */
 
 void merge_sort(int *array, size_t size)
 {
-	int low, high;
+    if (size > 1)
+    {
+        int  mid, *left, *right;
+	size_t i, left_size, right_size;
 
-	low = 0;
-	high = size - 1;
+	mid  = size / 2;
+	left = array;
+	right = array + mid;
+	left_size = mid;
+	right_size = size - mid;
 
-	recursion(array, low, high);
+        printf("Merging...\n[left]: ");
+        for (i = 0; i < left_size; i++)
+	{
+            printf("%d", left[i]);
+            if (i < left_size - 1)
+	    {
+                printf(", ");
+            }
+        }
+        printf("\n[right]: ");
+        for (i = 0; i < right_size; i++)
+	{
+            printf("%d", right[i]);
+            if (i < right_size - 1)
+	    {
+                printf(", ");
+            }
+        }
+        printf("\n");
 
+        merge_sort(left, left_size);
+        merge_sort(right, right_size);
+
+        merge(array, left, left_size, right, right_size);
+
+        printf("[Done]: ");
+        for (i = 0; i < size; i++)
+	{
+            printf("%d", array[i]);
+            if (i < size - 1)
+	    {
+                printf(", ");
+            }
+        }
+        printf("\n");
+    }
 }
