@@ -1,62 +1,90 @@
 #include "sort.h"
 
 /**
- * merge - Merges two sorted sub-arrays into the original
- * @array: original array
- * @left: left sub-array
- * @left_size: Size of the left sub-array
- * @right: right sub-array
- * @right_size: Size of the right sub-array
+ * merge - merges two arrays
+ * @array: array to merge
+ * @low: index zero
+ * @mid: middle index
+ * @high: largest index
  */
-void merge(int *array, int *left, size_t left_size,
-		int *right, size_t right_size)
+
+void merge(int *array, int low, int mid, int high)
 {
-	size_t i = 0, j = 0, k = 0;
+	int array1[100], array2[100], result[100];
+	int i = 0, j = 0, k = 0;
 
-	printf("Merging...\n[left]: ");
-	print_array(left, left_size);
-	printf("[right]: ");
-	print_array(right, right_size);
+	printf("[left]: %d", low);
 
-	while (i < left_size && j < right_size)
+	for (i = 0; i < mid - low + 1; i++)
+		array1[i] = array[low + i];
+	for (i = 0; i < high - mid; i++)
+		array2[i] = array[mid + 1 + i];
+	i = 0;
+	while (i < mid - low + 1 && j < high - mid)
 	{
-		if (left[i] <= right[j])
-			array[k++] = left[i++];
+		if (array1[i] < array2[j])
+		{
+			result[k] = array1[i], k++, i++;
+		}
 		else
-			array[k++] = right[j++];
+		{
+			result[k] = array2[j], k++, j++;
+		}
 	}
 
-	while (i < left_size)
-		array[k++] = left[i++];
+	while (i < mid - low + 1)
+	{
+		result[k] = array1[i];
+		k++;
+		i++;
+	}
 
-	while (j < right_size)
-		array[k++] = right[j++];
+	while (j < high - mid)
+	{
+		result[k] = array2[j];
+		k++;
+		j++;
+	}
 
-	printf("[Done]: ");
-	print_array(array, left_size + right_size);
+	for (i = low; i <= high; i++)
+	{
+		array[i] = result[i - low];
+	}
 }
 
 /**
- * merge_sort - Sorts an array of integers in ascending order using
- * the Merge sort algorithm
- * @array: array to be sorted
- * @size: Size of the array
+ * recursion - divides array
+ * @array: array to divide
+ * @low: index zero
+ * @high: largest index
  */
+
+void recursion(int *array, int low, int high)
+{
+	int mid;
+
+	if (low < high)
+	{
+		mid = low + (high - low) / 2;
+		recursion(array, low, mid);
+		recursion(array, mid + 1, high);
+		merge(array, low, mid, high);
+	}
+}
+
+/**
+ * merge_sort - sorts array
+ * @array: array to sort
+ * @size: size of array.
+ */
+
 void merge_sort(int *array, size_t size)
 {
-	size_t mid, left_size, right_size;
-	int *left, *right
+	int low, high;
 
-	mid = size / 2;
-	left = array;
-	right = array + mid;
-	left_size = mid;
-	right_size = size - mid;
+	low = 0;
+	high = size - 1;
 
-	if (size <= 1)
-                return;
+	recursion(array, low, high);
 
-	merge_sort(left, left_size);
-	merge_sort(right, right_size);
-	merge(array, left, left_size, right, right_size);
 }
